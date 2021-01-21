@@ -26,8 +26,6 @@ class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener{
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-
-
     private var isDataLoaded = false
 
     private lateinit var viewMvc: QuestionListViewMvc
@@ -70,8 +68,7 @@ class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener{
         coroutineScope.launch {
             viewMvc.showProgressIndication()
             try {
-                val result = fetchQuestionsUseCase.fetchLatestQuestions()
-                when (result) {
+                when (val result = fetchQuestionsUseCase.fetchLatestQuestions()) {
                     is FetchQuestionsUseCase.Result.Success -> {
                         viewMvc.bindQuestions(result.questions)
                         isDataLoaded = true
