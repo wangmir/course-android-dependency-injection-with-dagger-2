@@ -10,29 +10,27 @@ import androidx.annotation.IdRes
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.techyourchance.dagger2course.R
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
+import com.techyourchance.dagger2course.screens.common.viewsmvc.BaseViewMvc
 
 class QuestionDetailsViewMvc (
         private val layoutInflater: LayoutInflater,
         private val parent: ViewGroup?
-){
+): BaseViewMvc<QuestionDetailsViewMvc.Listener>(
+        layoutInflater,
+        parent,
+        R.layout.layout_question_details) {
 
     interface Listener {
         fun onBackClicked()
     }
 
-    val rootView: View = layoutInflater.inflate(R.layout.layout_question_details, parent, false)
-
-    private lateinit var toolbar: MyToolbar
-    private lateinit var swipeRefresh: SwipeRefreshLayout
-    private lateinit var txtQuestionBody: TextView
-
-    private val listeners = HashSet<Listener>()
+    private val toolbar: MyToolbar = findViewById(R.id.toolbar)
+    private val swipeRefresh: SwipeRefreshLayout = findViewById(R.id.swipeRefresh)
+    private val txtQuestionBody: TextView = findViewById(R.id.txt_question_body)
 
     init {
-        txtQuestionBody = findViewById(R.id.txt_question_body)
 
         // init toolbar
-        toolbar = findViewById(R.id.toolbar)
         toolbar.setNavigateUpListener {
             for (listener in listeners) {
                 listener.onBackClicked()
@@ -40,20 +38,7 @@ class QuestionDetailsViewMvc (
         }
 
         // init pull-down-to-refresh (used as a progress indicator)
-        swipeRefresh = findViewById(R.id.swipeRefresh)
         swipeRefresh.isEnabled = false
-    }
-
-    fun <T: View?> findViewById(@IdRes id: Int): T {
-        return rootView.findViewById<T>(id)
-    }
-
-    fun registerListener(listener: Listener) {
-        listeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
     }
 
     fun showProgressIndication() {
