@@ -10,9 +10,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.techyourchance.dagger2course.Constants
+import com.techyourchance.dagger2course.MyApplication
 import com.techyourchance.dagger2course.R
 import com.techyourchance.dagger2course.networking.StackoverflowApi
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
+import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.ServerErrorDialogFragment
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
@@ -32,18 +34,22 @@ class QuestionDetailsActivity : AppCompatActivity(), QuestionDetailsViewMvc.List
 
     private lateinit var dialogsNavigator: DialogsNavigator
 
+    private lateinit var screensNavigator: ScreensNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detailsViewMvc = QuestionDetailsViewMvc(LayoutInflater.from(this), null)
 
         setContentView(detailsViewMvc.rootView)
 
-        fetchQuestionDetailsUseCase = FetchQuestionDetailsUseCase()
+        fetchQuestionDetailsUseCase = (application as MyApplication).fetchQuestionDetailsUseCase
 
         // retrieve question ID passed from outside
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
 
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
+
+        screensNavigator = ScreensNavigator(this)
     }
 
     override fun onStart() {
@@ -59,7 +65,7 @@ class QuestionDetailsActivity : AppCompatActivity(), QuestionDetailsViewMvc.List
     }
 
     override fun onBackClicked() {
-        onBackPressed()
+        screensNavigator.navigateBack()
     }
 
     private fun fetchQuestionDetails() {
