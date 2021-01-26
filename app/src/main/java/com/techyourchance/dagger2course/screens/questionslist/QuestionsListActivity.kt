@@ -26,74 +26,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-class QuestionsListActivity : BaseActivity(), QuestionListViewMvc.Listener{
-
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
-    private var isDataLoaded = false
-
-    private lateinit var viewMvc: QuestionListViewMvc
-
-    private lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
-
-    private lateinit var dialogsNavigator: DialogsNavigator
-
-    private lateinit var screensNavigator: ScreensNavigator
+class QuestionsListActivity : BaseActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.layout_frame)
 
-        viewMvc = QuestionListViewMvc(LayoutInflater.from(this), null)
-
-        setContentView(viewMvc.rootView)
-
-        fetchQuestionsUseCase = compositionRoot.fetchQuestionsUseCase
-
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
-
-        screensNavigator = ScreensNavigator(this)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewMvc.registerListener(this)
-        if (!isDataLoaded) {
-            fetchQuestions()
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.frame_content, QuestionsListFragment())
+                    .commit()
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewMvc.unregisterListener(this)
-        coroutineScope.coroutineContext.cancelChildren()
-    }
-
-    override fun onRefreshClicked() {
-        fetchQuestions()
-    }
-
-    override fun onQuestionClicked(clickedQuestion: Question) {
-        screensNavigator.toQuestionDetails(clickedQuestion.id)
-    }
-
-    private fun fetchQuestions() {
-        coroutineScope.launch {
-            viewMvc.showProgressIndication()
-            try {
-                when (val result = fetchQuestionsUseCase.fetchLatestQuestions()) {
-                    is FetchQuestionsUseCase.Result.Success -> {
-                        viewMvc.bindQuestions(result.questions)
-                        isDataLoaded = true
-                    }
-                    is FetchQuestionsUseCase.Result.Failure -> onFetchFailed()
-                }
-            } finally {
-                viewMvc.hideProgressIndication()
-            }
-        }
-    }
-
-    private fun onFetchFailed() {
-        dialogsNavigator.showServerErrorDialog()
     }
 }

@@ -39,7 +39,7 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        detailsViewMvc = QuestionDetailsViewMvc(LayoutInflater.from(this), null)
+        detailsViewMvc = compositionRoot.viewMvcFactory.newQuestsDetailsViewMvc(null)
 
         setContentView(detailsViewMvc.rootView)
 
@@ -48,7 +48,7 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
         // retrieve question ID passed from outside
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
 
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
+        dialogsNavigator = compositionRoot.dialogsNavigator
 
         screensNavigator = compositionRoot.screensNavigator
     }
