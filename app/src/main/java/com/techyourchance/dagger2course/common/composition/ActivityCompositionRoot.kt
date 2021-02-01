@@ -10,7 +10,9 @@ import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 
-class ActivityCompositionRoot(private val activity: AppCompatActivity, private val appCompositionRoot: AppCompositionRoot) {
+class ActivityCompositionRoot(
+        val activity: AppCompatActivity,
+        private val appCompositionRoot: AppCompositionRoot) {
 
     val layoutInflater = LayoutInflater.from(activity)
 
@@ -18,8 +20,9 @@ class ActivityCompositionRoot(private val activity: AppCompatActivity, private v
         ScreensNavigator(activity)
     }
 
+    val application get() = appCompositionRoot.application
+
     val fragmentManager get() = activity.supportFragmentManager
 
     val stackoverflowApi get() = appCompositionRoot.stackoverflowApi
-
 }
