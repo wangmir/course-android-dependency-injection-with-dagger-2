@@ -21,6 +21,7 @@ import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.ServerErrorDialogFragment
 import com.techyourchance.dagger2course.screens.common.fragments.BaseFragment
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 import com.techyourchance.dagger2course.screens.questiondetails.QuestionDetailsActivity
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
@@ -35,20 +36,20 @@ class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener{
 
     private lateinit var viewMvc: QuestionListViewMvc
 
-    private lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+    lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+    lateinit var dialogsNavigator: DialogsNavigator
+    lateinit var screensNavigator: ScreensNavigator
 
-    private lateinit var screensNavigator: ScreensNavigator
+    lateinit var viewMvcFactory: ViewMvcFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fetchQuestionsUseCase = compositionRoot.fetchQuestionsUseCase
-
-        screensNavigator = compositionRoot.screensNavigator
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewMvc = compositionRoot.viewMvcFactory.newQuestsListViewMvc(container)
+        viewMvc = viewMvcFactory.newQuestsListViewMvc(container)
         return viewMvc.rootView
     }
 
@@ -92,6 +93,6 @@ class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener{
     }
 
     private fun onFetchFailed() {
-        compositionRoot.dialogsNavigator.showServerErrorDialog()
+        dialogsNavigator.showServerErrorDialog()
     }
 }

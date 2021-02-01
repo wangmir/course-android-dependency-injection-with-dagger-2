@@ -19,6 +19,7 @@ import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.ServerErrorDialogFragment
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,26 +32,22 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
 
     private lateinit var detailsViewMvc: QuestionDetailsViewMvc
 
-    private lateinit var fetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase
-
-    private lateinit var dialogsNavigator: DialogsNavigator
-
-    private lateinit var screensNavigator: ScreensNavigator
+    lateinit var fetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase
+    lateinit var dialogsNavigator: DialogsNavigator
+    lateinit var screensNavigator: ScreensNavigator
+    lateinit var viewMvcFactory: ViewMvcFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
         detailsViewMvc = compositionRoot.viewMvcFactory.newQuestsDetailsViewMvc(null)
 
         setContentView(detailsViewMvc.rootView)
 
-        fetchQuestionDetailsUseCase = compositionRoot.fetchQuestionDetailsUseCase
-
         // retrieve question ID passed from outside
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
 
-        dialogsNavigator = compositionRoot.dialogsNavigator
 
-        screensNavigator = compositionRoot.screensNavigator
     }
 
     override fun onStart() {
