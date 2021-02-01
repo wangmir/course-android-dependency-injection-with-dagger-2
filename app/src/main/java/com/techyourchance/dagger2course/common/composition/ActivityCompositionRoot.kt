@@ -12,19 +12,14 @@ import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 
 class ActivityCompositionRoot(private val activity: AppCompatActivity, private val appCompositionRoot: AppCompositionRoot) {
 
-    val viewMvcFactory get() = ViewMvcFactory(LayoutInflater.from(activity))
+    val layoutInflater = LayoutInflater.from(activity)
 
     val screensNavigator by lazy {
         ScreensNavigator(activity)
     }
 
-    val intent get() = activity.intent
+    val fragmentManager get() = activity.supportFragmentManager
 
-    private val fragmentManager get() = activity.supportFragmentManager
-    val dialogsNavigator get() = DialogsNavigator(fragmentManager)
-
-    private val stackoverflowApi get() = appCompositionRoot.stackoverflowApi
-    val fetchQuestionDetailsUseCase get() = FetchQuestionDetailsUseCase(stackoverflowApi)
-    val fetchQuestionsUseCase get () = FetchQuestionsUseCase(stackoverflowApi)
+    val stackoverflowApi get() = appCompositionRoot.stackoverflowApi
 
 }
