@@ -1,7 +1,9 @@
-package com.techyourchance.dagger2course.common.dependnecyinjection
+package com.techyourchance.dagger2course.common.dependnecyinjection.activity
 
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import com.techyourchance.dagger2course.common.dependnecyinjection.app.AppComponent
+import com.techyourchance.dagger2course.common.dependnecyinjection.app.AppModule
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import dagger.Module
 import dagger.Provides
@@ -9,24 +11,21 @@ import dagger.Provides
 @Module
 class ActivityModule(
         val activity: AppCompatActivity,
-        private val appModule: AppModule
+        private val appComponent: AppComponent
 ) {
-
-    private val screensNavigator by lazy {
-        ScreensNavigator(activity)
-    }
-
     @Provides
     fun activity() = this.activity
-    @Provides
-    fun screensNavigator(activity: AppCompatActivity) = screensNavigator
 
     @Provides
-    fun application() = appModule.application
+    @ActivityScope
+    fun screensNavigator(activity: AppCompatActivity) = ScreensNavigator(activity)
+
+    @Provides
+    fun application() = appComponent.application()
     @Provides
     fun layoutInflater() = LayoutInflater.from(activity)
     @Provides
     fun fragmentManager() = activity.supportFragmentManager
     @Provides
-    fun stackoverflowApi() = appModule.stackoverflowApi()
+    fun stackoverflowApi() = appComponent.stackoverflowApi()
 }
