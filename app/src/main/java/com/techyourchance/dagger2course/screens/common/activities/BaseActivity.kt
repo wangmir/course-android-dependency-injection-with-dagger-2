@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.techyourchance.dagger2course.MyApplication
 import com.techyourchance.dagger2course.common.dependnecyinjection.ActivityCompositionRoot
 import com.techyourchance.dagger2course.common.dependnecyinjection.Injector
-import com.techyourchance.dagger2course.common.dependnecyinjection.PresentationCompositionRoot
+import com.techyourchance.dagger2course.common.dependnecyinjection.PresentationComponent
+import com.techyourchance.dagger2course.common.dependnecyinjection.PresentationModule
 
 open class BaseActivity: AppCompatActivity() {
 
@@ -15,8 +16,12 @@ open class BaseActivity: AppCompatActivity() {
     }
 
     private val compositionRoot by lazy {
-        PresentationCompositionRoot(activityCompositionRoot)
+        PresentationModule(activityCompositionRoot)
     }
 
-    protected val injector get() = Injector(compositionRoot)
+    private val presentationComponent by lazy {
+
+    }
+
+    protected val injector get() = Injector(presentationComponent)
 }
