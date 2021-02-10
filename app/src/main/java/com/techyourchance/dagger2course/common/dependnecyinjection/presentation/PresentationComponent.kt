@@ -10,10 +10,11 @@ import com.techyourchance.dagger2course.screens.questiondetails.QuestionDetailsA
 import com.techyourchance.dagger2course.screens.questionslist.QuestionsListActivity
 import com.techyourchance.dagger2course.screens.questionslist.QuestionsListFragment
 import dagger.Component
+import dagger.Subcomponent
 import javax.inject.Scope
 
 @PresentationScope
-@Component(dependencies = [ActivityComponent::class], modules = [PresentationModule::class])
+@Subcomponent(modules = [PresentationModule::class])
 interface PresentationComponent {
 
     fun inject(fragment: QuestionsListFragment)
