@@ -16,10 +16,6 @@ class ActivityModule(
     fun activity() = this.activity
 
     @Provides
-    @ActivityScope
-    fun screensNavigator(activity: AppCompatActivity) = ScreensNavigator(activity)
-
-    @Provides
     fun layoutInflater() = LayoutInflater.from(activity)
     @Provides
     fun fragmentManager() = activity.supportFragmentManager

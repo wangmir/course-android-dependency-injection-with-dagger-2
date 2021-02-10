@@ -1,6 +1,7 @@
 package com.techyourchance.dagger2course.screens.questionslist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,9 @@ class QuestionsListFragment : BaseFragment(), QuestionsListViewMvc.Listener {
     private var isDataLoaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         injector.inject(this)
+        Log.e("QuestListFragment", "$screensNavigator")
         super.onCreate(savedInstanceState)
     }
 

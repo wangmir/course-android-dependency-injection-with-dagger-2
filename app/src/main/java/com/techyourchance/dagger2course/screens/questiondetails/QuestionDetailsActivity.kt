@@ -3,6 +3,7 @@ package com.techyourchance.dagger2course.screens.questiondetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
@@ -26,6 +27,7 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
+        Log.e("QuestDetailsActivity", "$screensNavigator")
         super.onCreate(savedInstanceState)
         viewMvc = viewMvcFactory.newQuestionDetailsViewMvc(null)
         setContentView(viewMvc.rootView)
@@ -52,7 +54,7 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
                 val result = fetchQuestionDetailsUseCase.fetchQuestion(questionId)
                 when(result) {
                     is FetchQuestionDetailsUseCase.Result.Success -> {
-                        viewMvc.bindQuestionBody(result.question.body)
+                        viewMvc.bindQuestionWithBody(result.question)
                     }
                     is FetchQuestionDetailsUseCase.Result.Failure -> onFetchFailed()
                 }

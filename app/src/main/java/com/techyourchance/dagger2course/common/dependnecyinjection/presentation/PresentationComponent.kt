@@ -14,9 +14,10 @@ import dagger.Subcomponent
 import javax.inject.Scope
 
 @PresentationScope
-@Subcomponent(modules = [PresentationModule::class])
+@Subcomponent()
 interface PresentationComponent {
 
     fun inject(fragment: QuestionsListFragment)
     fun inject(activity: QuestionDetailsActivity)
+    fun inject(activity: QuestionsListActivity)
 }
