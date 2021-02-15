@@ -9,12 +9,7 @@ import com.techyourchance.dagger2course.common.dependnecyinjection.app.DaggerApp
 
 open class BaseActivity: AppCompatActivity() {
 
-    private val appComponent by lazy {
-        DaggerAppComponent
-                .builder()
-                .appModule(AppModule(application as MyApplication))
-                .build()
-    }
+    private val appComponent get() = (application as MyApplication).appComponent
 
     val activityComponent by lazy {
         appComponent.newActivityComponent(ActivityModule(this))
